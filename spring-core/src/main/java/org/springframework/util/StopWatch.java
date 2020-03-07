@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.lang.Nullable;
+//import org.springframework.lang.Nullable;
+import units.qual.*;
 
 /**
  * Simple stop watch, allowing for timing of a number of tasks, exposing total
@@ -58,19 +59,19 @@ public class StopWatch {
 	private final List<TaskInfo> taskList = new LinkedList<>();
 
 	/** Start time of the current task. */
-	private long startTimeNanos;
+	private @ns long startTimeNanos;
 
 	/** Name of the current task. */
-	@Nullable
+	// @Nullable
 	private String currentTaskName;
 
-	@Nullable
+	// @Nullable
 	private TaskInfo lastTaskInfo;
 
 	private int taskCount;
 
 	/** Total running time. */
-	private long totalTimeNanos;
+	private @ns long totalTimeNanos;
 
 
 	/**
@@ -176,7 +177,7 @@ public class StopWatch {
 	 * @since 4.2.2
 	 * @see #isRunning()
 	 */
-	@Nullable
+	// @Nullable
 	public String currentTaskName() {
 		return this.currentTaskName;
 	}
@@ -186,7 +187,7 @@ public class StopWatch {
 	 * @since 5.2
 	 * @see #getLastTaskTimeMillis()
 	 */
-	public long getLastTaskTimeNanos() throws IllegalStateException {
+	public @ns long getLastTaskTimeNanos() throws IllegalStateException {
 		if (this.lastTaskInfo == null) {
 			throw new IllegalStateException("No tasks run: can't get last task interval");
 		}
@@ -197,7 +198,7 @@ public class StopWatch {
 	 * Get the time taken by the last task in milliseconds.
 	 * @see #getLastTaskTimeNanos()
 	 */
-	public long getLastTaskTimeMillis() throws IllegalStateException {
+	public @ms long getLastTaskTimeMillis() throws IllegalStateException {
 		if (this.lastTaskInfo == null) {
 			throw new IllegalStateException("No tasks run: can't get last task interval");
 		}
@@ -231,7 +232,7 @@ public class StopWatch {
 	 * @see #getTotalTimeMillis()
 	 * @see #getTotalTimeSeconds()
 	 */
-	public long getTotalTimeNanos() {
+	public @ns long getTotalTimeNanos() {
 		return this.totalTimeNanos;
 	}
 
@@ -240,7 +241,7 @@ public class StopWatch {
 	 * @see #getTotalTimeNanos()
 	 * @see #getTotalTimeSeconds()
 	 */
-	public long getTotalTimeMillis() {
+	public @ms long getTotalTimeMillis() {
 		return nanosToMillis(this.totalTimeNanos);
 	}
 
@@ -249,7 +250,7 @@ public class StopWatch {
 	 * @see #getTotalTimeNanos()
 	 * @see #getTotalTimeMillis()
 	 */
-	public double getTotalTimeSeconds() {
+	public @s double getTotalTimeSeconds() {
 		return nanosToSeconds(this.totalTimeNanos);
 	}
 
@@ -330,11 +331,12 @@ public class StopWatch {
 	}
 
 
-	private static long nanosToMillis(long duration) {
+	private static @ms long nanosToMillis(@ns long duration) {
 		return TimeUnit.NANOSECONDS.toMillis(duration);
 	}
 
-	private static double nanosToSeconds(long duration) {
+
+	private static @s double nanosToSeconds(@ns long duration) {
 		return duration / 1_000_000_000.0;
 	}
 
@@ -346,9 +348,9 @@ public class StopWatch {
 
 		private final String taskName;
 
-		private final long timeNanos;
+		private final @ns long timeNanos;
 
-		TaskInfo(String taskName, long timeNanos) {
+		TaskInfo(String taskName, @ns long timeNanos) {
 			this.taskName = taskName;
 			this.timeNanos = timeNanos;
 		}
@@ -366,7 +368,7 @@ public class StopWatch {
 		 * @see #getTimeMillis()
 		 * @see #getTimeSeconds()
 		 */
-		public long getTimeNanos() {
+		public @ns long getTimeNanos() {
 			return this.timeNanos;
 		}
 
@@ -375,7 +377,7 @@ public class StopWatch {
 		 * @see #getTimeNanos()
 		 * @see #getTimeSeconds()
 		 */
-		public long getTimeMillis() {
+		public @ms long getTimeMillis() {
 			return nanosToMillis(this.timeNanos);
 		}
 
@@ -384,7 +386,7 @@ public class StopWatch {
 		 * @see #getTimeMillis()
 		 * @see #getTimeNanos()
 		 */
-		public double getTimeSeconds() {
+		public @s double getTimeSeconds() {
 			return nanosToSeconds(this.timeNanos);
 		}
 
